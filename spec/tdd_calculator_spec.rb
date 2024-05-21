@@ -30,5 +30,19 @@ RSpec.describe TddCalculator do
       end
     end
 
+    context 'when the input contains newlines as delimiters' do
+      it 'returns the sum of the numbers' do
+        expect(calculator.add("1\n2,3")).to eq(6)
+        expect(calculator.add("4\n5\n6")).to eq(15)
+        expect(calculator.add("7,8\n9")).to eq(24)
+      end
+    end
+
+    context 'when the input format is invalid' do
+      it 'raises an exception' do
+        expect { calculator.add("1,\n") }.to raise_error(ArgumentError, 'Invalid input format: 1,\n')
+        expect { calculator.add("1,2\n") }.to raise_error(ArgumentError, 'Invalid input format: 1,2\n')
+      end
+
   end
 end

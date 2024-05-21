@@ -2,24 +2,16 @@ class TddCalculator
   def add(input)
     return 0 if input.strip.empty?
 
-    begin
-      validate_newline(input)
+    validate_newline(input)
 
-      input, delimiter = delimitere_used(input)
-      regex_str = /^[\d\(\)\-#{delimiter}]+$/
+    input, delimiter = delimitere_used(input)
+    regex_str = /^[\d\(\)\-#{delimiter}]+$/
 
-      validate_string(input, regex_str)
-      numbers = input.split(delimiter).map(&:to_i)
-      negative_numbers(numbers)
-    rescue ArgumentError => e
-      error = e.message
-    end
+    validate_string(input, regex_str)
+    numbers = input.split(delimiter).map(&:to_i)
+    negative_numbers(numbers)
 
-    if error.nil?
-      numbers.sum
-    else
-      error
-    end
+    numbers.sum
   end
 
   def validate_newline(input)

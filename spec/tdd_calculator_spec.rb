@@ -40,9 +40,18 @@ RSpec.describe TddCalculator do
 
     context 'when the input format is invalid' do
       it 'raises an exception' do
-        expect { calculator.add("1,\n") }.to raise_error(ArgumentError, 'Invalid input format: 1,\n')
-        expect { calculator.add("1,2\n") }.to raise_error(ArgumentError, 'Invalid input format: 1,2\n')
+        expect { calculator.add("1,\n") }.to raise_error(ArgumentError, "The following input is invalid: 1,\n")
+        expect { calculator.add("1,2\n") }.to raise_error(ArgumentError, "The following input is invalid: 1,2\n")
       end
+    end
+
+    context 'when the input contains negative numbers' do
+      it 'raises an exception' do
+        expect { calculator.add('1,-2,3') }.to raise_error(ArgumentError, 'Negative numbers not allowed: -2')
+        expect { calculator.add('-1,-2,-3') }.to raise_error(ArgumentError, 'Negative numbers not allowed: -1, -2, -3')
+        expect { calculator.add('10,-20,30,-40,50') }.to raise_error(ArgumentError, 'Negative numbers not allowed: -20, -40')
+      end
+    end
 
   end
 end

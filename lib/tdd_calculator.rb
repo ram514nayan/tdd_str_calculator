@@ -1,13 +1,18 @@
+require 'byebug'
 class TddCalculator
   def add(input)
-  	return 0 if input.empty?
+  	return 0 if input.strip.empty?
 
-  	validate_newline input
+  	validate_newline(input)
 
-  	#Accept new line in string as delimiter
-  	input = input.gsub(/-\n+/, "#{','}-").split("\n").join(',')
-  	numbers = input.split(',').map(&:to_i)
-  	invalid_numbers numbers
+  	input, delimiter = delimitere_used(input)
+  	regex_str = /^[\d\(\)\-#{delimiter}]+$/
+
+  	validate_string(input, regex_str)
+
+  	numbers = input.split(delimiter).map(&:to_i)
+
+  	negative_numbers(numbers)
 
   	numbers.sum
   end
@@ -18,12 +23,12 @@ class TddCalculator
     end
   end
 
-  def invalid_numbers(numbers)
+  def negative_numbers(numbers)
     negative_nums = numbers.select(&:negative?)
     raise ArgumentError, "Negative numbers not allowed: #{negative_nums.join(', ')}" unless negative_nums.empty?
   end
 
-  def check_delimiter(input_str)
+  def delimitere_used(input_str)
     delimiter = ','
     if input_str[0..1].include?("//")
       delimiter = input_str[2]
@@ -33,5 +38,15 @@ class TddCalculator
     input_str = input_str.gsub(/-\n+/, "#{delimiter}-").split("\n").join(delimiter)
     [input_str, delimiter]
   end
-  
+
+  def validate_delimiter(del)
+    raise(ArgumentError, "Invalid input: Delimiter should not be number, ") unless del.to_s.match? /^(?![0-9]+$).*/
+  end
+
+  def validate_string input, regex_str
+    unless input.match regex_str
+      raise(ArgumentError, "Invalid input: Only allowed specified delimiter as (//delimiter) with integer, ")
+    end
+  end
+
 end

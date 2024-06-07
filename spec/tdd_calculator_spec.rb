@@ -70,5 +70,13 @@ RSpec.describe TddCalculator do
       end
     end
 
+
+    context 'When custom delimeter is *' do 
+      it 'should return multiplication of input' do
+        expect(calculator.add("//*\n3*3")).to eq(9)
+        expect(calculator.add("//*\n0")).to eq(0)
+        expect(calculator.add("//*\n0*1*2*3")).to eq(0)
+      end
+    end
   end
 end
